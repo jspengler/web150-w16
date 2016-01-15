@@ -1,0 +1,99 @@
+<html>
+
+<head>
+
+    <title>WEB150 Assignment 2</title>
+    
+</head>
+
+<body>
+
+<h1>Fortune Telling by Mystic Gorey</h1>    
+    
+<p>Inspired by the Gastlycrumb Tinies.</p>
+
+<button onclick="fortuneStart()">Find out your gruesome end!</button>
+
+<script>
+    
+    function fortuneStart() {
+        
+        var proceed = confirm("Not for the feint of heart!\nAre you ready to see what gruesome way you will meet your fate?");
+        
+        if (proceed) {
+            
+            var choice1 = prompt("What is your favorite fuzzy animal?:\na - Kitties\nb - Puppies\nc - Hamsters\nd - Scorpions", "a");
+            if (choice1.toLowerCase() != "a" && choice1.toLowerCase() != "b" && choice1.toLowerCase() != "c" && choice1.toLowerCase() != "d") {
+                document.write("Please enter in a, b, c, or d. Refresh to restart.");
+            }
+            else {
+                
+                var choice2 = prompt("What is your favorite number?", "0");
+                if (isNaN(choice2)) {
+                    document.write("Please enter in a number. Refresh to restart.")
+                }
+                else {
+                    
+                    var factor = 0;
+                    switch (choice1.toLowerCase()) {
+                        case "a": factor = 1; break;
+                        case "b": factor = 2; break;
+                        case "c": factor = 3; break;
+                        case "d": factor = 4; break;
+                    }
+                    
+                    var result = (Math.abs(Number(choice2) * factor) % 10);
+                    
+                    document.write("<b>Your Fate:</b> ")
+                    
+                    switch (result % 10) {
+                        case 0:
+                            document.write("You will fall down the stairs!");
+                            break;
+                        case 1:
+                            document.write("You will be assaulted by bears!");
+                            break;
+                        case 2:
+                            document.write("You will waste away!");
+                            break;
+                        case 3:
+                            document.write("You will be thrown from a sleigh!");
+                            break;
+                        case 4:
+                            document.write("You will choke on a peach!");
+                            break;
+                        case 5:
+                            document.write("You will be sucked dry by a leech!");
+                            break;
+                        case 6:
+                            document.write("You will be smothered under a rug!");
+                            break;
+                        case 7:
+                            document.write("You will be done in by a thug!");
+                            break;
+                        case 8:
+                            document.write("You will drown in a lake!");
+                            break;
+                        case 9:
+                            document.write("You will take lye by mistake!");
+                            break;
+                    }
+                    
+                    document.write("<br><br>Breakdown:<br>Multiplicative Factor from Fuzzy Pet: "+factor);
+                    document.write("<br>Favorite Number: "+Math.abs(Number(choice2)));      
+                    document.write("<br>Equation: "+Math.abs(choice2)+" * "+factor+" % 10 = "+result+"<br>");
+                }
+            }
+        }
+
+        else {
+            document.write("Wisely chosen. Ignorance is bliss.")
+        }
+    
+    }
+    
+</script>
+    
+</body>
+    
+</html>
