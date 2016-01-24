@@ -1,0 +1,130 @@
+<html>
+
+<head>
+    
+<title>WEB150 Assignment 3 - True Crime</title>
+
+</head>
+    
+<body>
+    
+<script src="Seattle_Crime_Stats_2013.js"></script>
+
+<script>
+
+//QUESTIONS TO ANSWER
+//1. How many total burglaries were reported in 2013? 
+//2. Which precinct had the most burglaries in 2013?
+//3. What was the average number of burglaries per precinct?
+//4. In which month were the fewest assaults reported?
+    
+    // define variable for the array index of each data value, for readability of later code
+    var INDEX_MONTH    = 0;
+    var INDEX_PRECINCT = 1;
+    var INDEX_CRIME    = 2;
+    var INDEX_COUNT    = 3;
+    // helper array for translating month number to name
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var monthTotals = new Array(12);
+    
+    // Temp Arrays for calculations
+    var precinctList = [];
+    var precinctTotals = [];
+    var sharedIndex;
+    
+    //Variables for answers
+    var totalBurglaries = 0;
+    var precinctHighest;
+    var precinctHighestTotal = -Infinity;
+    var monthLowest;
+    var monthLowestTotal = Infinity;
+    
+    //For every row in the crime stats
+    for (row in crime_stats) {
+        
+        //If the row is a Burglary, start gathering data for questions 1-3.
+        if(crime_stats[row][INDEX_CRIME] == "Burglary") {
+            
+            //1. How many total burglaries were reported in 2013?
+            totalBurglaries += crime_stats[row][INDEX_COUNT];
+            
+            //2. Which precinct had the most burglaries in 2013?
+            //Check to see if the precinct is in the temp array. If not, add it.
+            if (precinctList.indexOf(crime_stats[row][INDEX_PRECINCT]) == -1) {
+                precinctList.push(crime_stats[row][INDEX_PRECINCT]);
+            }
+            
+            sharedIndex = precinctList.indexOf(crime_stats[row][INDEX_PRECINCT]);
+            
+            //Initialize the counter value if needed.
+            if (precinctTotals[sharedIndex] == undefined) {
+                precinctTotals[sharedIndex] = 0;
+            }
+            
+            precinctTotals[sharedIndex] += crime_stats[row][INDEX_COUNT];
+            
+        }
+        
+        //If the row is an Assult, start gathering data for question 4.
+        if(crime_stats[row][INDEX_CRIME] == "Assault") {
+            
+            //4. In which month were the fewest assaults reported?
+            
+            var adjustedMonth = crime_stats[row][INDEX_MONTH] - 1;
+            
+            //Initialize the counter value if needed.
+            if (monthTotals[adjustedMonth] == undefined) {
+                monthTotals[adjustedMonth] = 0;
+            }
+            
+            //Add the count to the proper place in the monthTotals
+            monthTotals[adjustedMonth] += crime_stats[row][INDEX_COUNT];
+            
+        }
+
+        //Find the precinct total that's the highest in Burglaries.
+        for (i in precinctTotals) {
+            if (precinctTotals[i] > precinctHighestTotal) {
+                precinctHighestTotal = precinctTotals[i];
+                precinctHighest = i;
+            }
+        }
+        
+        //Find the month that's lowest is Assaults.
+        for (i in monthTotals) {
+            if (monthTotals[i] < monthLowestTotal) {
+                monthLowestTotal = monthTotals[i];
+                monthLowest = i;
+            }
+        }
+        
+        
+    }
+    
+    //Display answers to questions.
+    document.write("Number of burglaries in 2013: " + totalBurglaries + "<br><br>");
+    document.write("Burglaries in 2013 per precinct:<br>");
+    
+    for (i in precinctList) {
+        document.write(precinctList[i] + ": " + precinctTotals[i] + "<br>");
+    }
+    
+    document.write("Precinct with highest number of burglaries: " + precinctList[precinctHighest] + "<br><br>");
+    
+    document.write("Average number of burglaries per precinct: " + totalBurglaries/precinctList.length + "<br><br>");
+    
+    document.write("Total assaults per month:<br>");
+    
+    for (i in monthNames) {
+        document.write(monthNames[i] + ": " + monthTotals[i] + "<br>");
+    }
+    
+    document.write("Month with the fewest assaults: " + monthNames[monthLowest] + "<br>");
+    
+    
+    
+    
+</script>
+
+</body>
+</html>
