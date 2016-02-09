@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Events &amp; Validation</h1>
+
+<form id="form1" action="#" onsubmit="return validateForm(this);">
+    
+    First Name: <input type="text" name="firstName"><div id="messageFirstName"></div><br>
+    Last Name: <input type="text" name="lastName"><div id="messageLastName"></div><br>
+    Password: <input type="text" name="password"><div id="messagePassword"></div><br>
+
+    <button>Check</button>
+
+</form>
+
+<hr>
+    
+<div id="message"></div>
+
+<script>
+
+    function validateForm(myForm) {
+  
+        var fn = myForm.firstName.value; // get text value of firstname field
+        var ln = myForm.lastName.value;
+        var ps = myForm.password.value;
+        var invalid = 0; // This should be zero at the end.
+        
+        //Validate that the first name field is filled.
+        if (fn.length > 0) {
+            messageFirstName.innerHTML = "Pass."
+        }
+        else {
+            messageFirstName.innerHTML = "Please enter a first name.";
+            invalid = 1;
+        }
+        
+        // Validate that the last name field is filled.
+        if (ln.length > 0) {
+            messageLastName.innerHTML = "Pass.";
+        }
+        else {
+            messageLastName.innerHTML = "Please enter a last name.";
+            invalid = 1;
+        }
+        
+        // Call the password validation 
+        if (passValidation(ps) != 1) {
+            invalid = 1;
+        }
+    
+        var message = document.getElementById("message");
+        
+        // Write the response to the message object if everything is valid.
+        if (invalid == 0) {
+            message.innerHTML = "Proceed citizen!"
+        }
+        else {
+            message.innerHTML = "Invalid input, please review form and submit again."
+        }
+
+    // Prevent page reload.
+    return false;
+    
+    }
+    
+    // Validate that a password is 8 characters.
+    function passValidation(password) {
+
+        var hoops = 0; // Looking to clear 3 hoops.
+        
+        // Validate length.
+        if (password.length > 7) { hoops++; }
+        
+        // Validate upper case character.
+        var upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        if(searchCount(upperChars, password) > 0) { hoops++; }
+        
+        // Same for lower case.
+        var lowerChars = "abcdefghijklmnopqrstuvwxyz";
+        if(searchCount(lowerChars, password) > 0) { hoops++; }
+        
+        // If all three hoops are cleared, return 1.
+        if (hoops == 3) {
+            messagePassword.innerHTML = "Pass.";
+            return 1;
+        }
+        else {
+            messagePassword.innerHTML = "Please enter a password that is at least eight characters and contains both an upper case and a lower case character.";
+            return 0;
+        }
+        
+    }
+    
+    function searchCount(key, str) {
+        var count = 0;
+        for (i = 0; i < key.length; i++) {
+            if (str.search(key[i]) > -1) { count++ }
+        }
+        return count;
+    }
+    
+</script>
+
+</body>
+</html> 
