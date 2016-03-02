@@ -76,8 +76,6 @@
                         // Go through every object and display the appropriate data.
                         for (i in data.list) {
 
-                            // *** HOW DO I DATE **
-
                             var forecast_date = new Date(data.list[i].dt*1000);
                             $("#displayForecast").append("<h2>" + forecast_date + "</h2>");
 
@@ -88,8 +86,6 @@
 
                             // Humidity.
                             $("#displayForecast").append("Humidity: " + data.list[i].main.humidity + "%<br>");
-
-                            // WHY DOESN'T THIS WORK OMG
 
                             // Weather description.
                             $("#displayForecast").append("Weather Desc: " + data.list[i].weather[0].description + "<br>");
