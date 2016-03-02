@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    
+    <title>Assigment 8 - Sunny with Chance of Awesome</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    
+    <style>
+    
+        h1 {
+            padding:0;
+            margin:10px 0 0 0;
+            font-size: 1.25em;
+            font-weight:bold;
+        }
+        
+        h2 {
+            padding:0;
+            margin:5px 0 0 0;
+            font-size:1em;
+            font-weight:bold;
+        }
+    
+    </style>
+    
+</head>
+    
+<body>
+
+    <form>
+    
+        Enter City in US: <input type="text" id="query" value="Seattle">
+        
+        <button>Submit</button>
+        
+    </form>
+    
+    <div id="displayName"></div>
+    <div id="displayForecast"></div>
+    
+    <script>
+    
+    //
+    
+        $(document).ready(function(){
+           
+            // When the button is clicked...
+            $("button").click(function(){
+                
+                event.preventDefault();
+                
+                // Clear the divs.
+                $("#displayName").html("");
+                $("#displayForecast").html("");
+                
+                // Check for valid input.
+                var q = $("#query").val();
+                console.log("Query: " +q);
+                
+                var hasNumber = /\d/;
+                
+                if (q != "" && hasNumber.test(q) == false) {
+                
+                var results = [];
+                
+                $.getJSON("http://api.openweathermap.org/data/2.5/forecast?q=" + q + ",us&mode=json&APPID=2fd00712a1ea96dcefb1587b4968cfcb", function(data, status){
+                    if (status == "success") {
+                        
+                        console.log("Get success.");
+
+                        // Display basic resulst.
+                        console.log("CITY NAME: " + data.city.name);
+                        $("#displayName").html("<h1>" + data.city.name + "</h1>");
+
+                        // Go through every object and display the appropriate data.
+                        for (i in data.list) {
+
+                            // *** HOW DO I DATE **
+
+                            var forecast_date = new Date(data.list[i].dt*1000);
+                            $("#displayForecast").append("<h2>" + forecast_date + "</h2>");
+
+                            // Min/max temp in F.
+                            var minTemp = kelvinToF(data.list[i].main.temp_min);
+                            var maxTemp = kelvinToF(data.list[i].main.temp_max); 
+                            $("#displayForecast").append("Min/Max Temp: " + minTemp +"F/" + maxTemp +"F<br>");
+
+                            // Humidity.
+                            $("#displayForecast").append("Humidity: " + data.list[i].main.humidity + "%<br>");
+
+                            // WHY DOESN'T THIS WORK OMG
+
+                            // Weather description.
+                            $("#displayForecast").append("Weather Desc: " + data.list[i].weather[0].description + "<br>");
+
+                            // Weather icon.
+                            $("#displayForecast").append("<img src='http://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png' /><br>");
+
+                        }             
+                        
+                    }
+                    else {
+                        console.log("Get failed.");
+                    }
+                });
+                
+            }
+            else {
+                console.log("NOPE");
+                $("#displayForecast").html("Please enter in a city name. No numbers, please.");
+            }
+             
+            });
+                
+        });
+        
+        function kelvinToF(value) {
+            var fahrenheit = (((Number(value) - 273.15)*9)/5) + 32;
+            return fahrenheit.toFixed(2);
+        }
+        
+    </script>
+
+
+</body>
+</html>
