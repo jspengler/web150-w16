@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <title>Assignment 9 - Drawing</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    
+    <style>
+    
+        canvas {
+            border:3px solid #ccc;
+            margin:auto;
+        }
+    
+    </style>
+    
+</head>
+<body>
+
+<canvas id="screenCanvas" width="600" height="650"></canvas>
+
+<script>
+
+    // Initialize.
+    var screen = document.getElementById("screenCanvas").getContext("2d");
+    var turnCount = 0;
+    screen.font = "16px Consolas";
+    screen.textAlign = "left";
+    screen.textBaseline = "top";
+    var mapIcon = [];
+    var charX = 3;
+    var charY = 3;
+    generateMap();
+    //drawScreen();
+    window.requestAnimationFrame(drawScreen);
+    
+    // Create the map array. Could be randomized in the future.
+    function generateMap() {
+        mapIcon = [
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,            
+            1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,            
+            1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,            
+            1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,            
+            1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,            
+            1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,            
+            1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,            
+            1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,            
+            1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,            
+            1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,            
+            1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,            
+            1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1,            
+            1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1,            
+            1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1,            
+            1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1,            
+            1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1,            
+            1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,            
+            1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1,            
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+            ];
+        console.log(mapIcon);
+    }
+    
+    // Draw the screen.
+    function drawScreen() {
+        
+        moveTo(0,0);
+        
+        screen.clearRect(0,0,600,650); //Clear screen.
+        screen.fillStyle = "black";
+        screen.fillRect(0,0,600,650); //Black background just in case.
+        
+        var mapX = 0;
+        var mapY = 0;
+        
+        //Go through the mapIcon array and draw.
+        for (i in mapIcon) {
+            switch(mapIcon[i]) {
+                case 0:
+                    screen.fillStyle = "grey";
+                    break;
+                case 1:
+                    screen.fillStyle = "brown";
+                    break;
+                default:
+                    screen.fillStyle = "white";                    
+            }
+            
+            screen.fillRect(mapX*30,mapY*30,mapX*30+30,mapY*30+30);
+            
+            if(mapX == 19) {
+                if(mapY == 19) { break; }
+                else { mapX = 0; mapY++; }
+            }
+            else {
+                mapX++;
+            }
+        }
+        
+        //Draw status bar at bottom.        
+        screen.fillStyle = "grey";
+        screen.fillRect(0,600,600,650); //Grey bottom.
+        screen.fillStyle = "white";
+        screen.fillText("Turn Count: " + turnCount, 5, 605);
+        
+        // Draw Character
+        screen.fillStyle = "yellow";
+        screen.beginPath();
+        screen.arc(charX*30+15,charY*30+15,12,0,2*Math.PI);
+        screen.fill();
+        
+        window.requestAnimationFrame(drawScreen);
+        
+    };
+    
+    // Controls.
+    document.addEventListener("keydown", userInput, false);
+    
+    function userInput(e) {
+        turnCount++;
+        var keyCode = e.keyCode;        
+        var absolutePosition = charX+(charY*20);
+        switch(keyCode) {
+            case 38: // Up arrow
+                //Check if map = 0
+                if(mapIcon[absolutePosition-20] == 0) {
+                    charY--;
+                }
+                break;
+            case 40: // Down arrow
+                if(mapIcon[absolutePosition+20] == 0) {
+                    charY++;
+                }
+                break;
+            case 37: // Left arrow
+                if(mapIcon[absolutePosition-1] == 0) {
+                    charX--;
+                }
+                break;
+            case 39: // Right arrow
+                if(mapIcon[absolutePosition+1] == 0) {
+                    charX++;
+                }
+                break;
+    }
+    }
+    
+</script>
+    
+</body>
+</html>
