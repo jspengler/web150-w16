@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WEB150 Final Presentation noUISlider</title>
+    <link href="nouislider.css" rel="stylesheet">
+    <link href="finalexample.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- THE SLIDERS -->
+    
+<div id="colorpicker">
+	<div class="sliders" id="red"></div>
+	<div class="sliders" id="green"></div>
+	<div class="sliders" id="blue"></div>
+
+	<div id="result"></div>
+</div>
+
+    
+<!-- THE NOUISILDER CODE -->
+    
+<script src="nouislider.js"></script>
+<script src="wNumb.js"></script>
+
+<script>
+
+// *** SET COLOR FUNCTION **
+    
+function setColor(){
+
+	// Get the slider values,
+	// stick them together.
+	var color = 'rgb(' +
+		sliders[0].noUiSlider.get() + ',' +
+		sliders[1].noUiSlider.get() + ',' +
+		sliders[2].noUiSlider.get() + ')';
+
+	// Fill the color box.
+	resultElement.style.background = color;
+	resultElement.style.color = color;
+}
+</script>
+    
+<script>
+
+// *** SLIDER INITIALIZATION ***
+
+var resultElement = document.getElementById('result'),
+	sliders = document.getElementsByClassName('sliders');
+
+for ( var i = 0; i < sliders.length; i++ ) {
+
+	noUiSlider.create(sliders[i], {
+		start: 127,
+		connect: "lower",
+		orientation: "vertical",
+		range: {
+			'min': 0,
+			'max': 255
+		},
+		format: wNumb({
+			decimals: 0
+		})
+	});
+
+	// Bind the color changing function
+	// to the slide event.
+	sliders[i].noUiSlider.on('slide', setColor);
+}
+</script>
+
+</body>
+</html>
