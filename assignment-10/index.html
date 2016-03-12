@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    
+    <style>
+    
+        .badresult {
+            color: red;
+        }
+        
+        .goodresult {
+            color: green;
+        }
+        
+    </style>
+    
+</head>
+<body>
+    
+<h1>Job Application</h1><hr>
+    
+<form id="myForm" onsubmit="return validateForm(this);">
+<table>        
+    <tr><td>Name:</td><td><input type="text" name="fullname"></td></tr>
+    <tr><td>Birthdate:</td><td><input type="text" name="birthyear" placeholder="Year" size="4" maxlength="4">-<input type="text" name="birthmonth" placeholder="Month" size="2" maxlength="2">-<input type="text" name="birthday" placeholder="Day" size="2" maxlength="2"></td></tr>
+    <tr><td>Phone:</td><td><input type="text" name="phone" placeholder="(123) 555-1234"></td></tr>
+    <tr><td>Zip code:</td><td><input type="text" name="zip" placeholder="12345 or 12345-1234"></td></tr>
+    <tr><td>Profile:</td><td><textarea rows="4" cols="30" name="profile"></textarea></td></tr>
+</table>
+<input type="submit" value="Register">
+</form>
+
+<hr><div id="message"></div>
+
+<script>
+    
+function checkValidDay(month, day) {
+    month = Number(month);
+    switch (month) {
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+            var totaldays = 31;
+            break;
+        case 2:
+            var totaldays = 29;
+            break;
+        case 4:
+        case 6:
+        case 10:
+        case 11:
+            var totaldays = 30;
+            break;
+        default:
+            var totaldays = 32;
+    }
+    if(day < 0 || day > totaldays) { return true; }
+    else { return false; }
+    
+}    
+
+function validateForm(myForm) {
+/*
+    1 - Apply validation requirements on each field, as described below.
+    2 - Show a placeholder value for fields that require a specific format
+    3 - Show an appropriate message for invalid entries
+    4 - On successful validation, display the number of times an entered profile mentions javascript, jquery or js
+    
+    Requirements:
+    
+    - applicants age must be >= 18
+    - phone number should be in format: (nnn) nnn-nnnn
+    - zip can be in these formats: nnnnn or nnnnn-nnnn
+*/
+    
+    var error = 0;
+    
+    // Clear message div.
+    $("#message").html("");
+    
+    // Validation for correct characters and formats.
+    // Make sure stuff is in there.
+    
+    // fullname
+    if(myForm.fullname.value == "") { $("#message").append("Please enter your name.<br>"); error++; }
+    
+    // birthyear
+    if(myForm.birthyear.value == "") { $("#message").append("Please enter a birth year.<br>"); error++; }
+    if(/\D/.test(myForm.birthyear.value)) { $("#message").append("Only enter digits into the birth year field.</br>"); error++;
+    }
+    if(myForm.birthyear.value < 1900) { $("#message").append("Please enter a birth year that after 1900.</br>"); error++;}
+    
+    // birthmonth
+    if(myForm.birthmonth.value == "") { $("#message").append("Please enter a birth month.<br>"); error++; }
+    if(/\D/.test(myForm.birthmonth.value)) { $("#message").append("Only enter digits into the birth month field.</br>"); error++;
+    }
+    if(myForm.birthmonth.value < 1 || myForm.birthmonth.value > 12) { $("#message").append("Please enter a birth month between 1 and 12.<br>"); error++;}
+    
+    // birthday
+    if(myForm.birthday.value == "") { $("#message").append("Please enter a birth day.<br>"); error++; }
+    if(/\D/.test(myForm.birthday.value)) { $("#message").append("Only enter digits into the birth day field.</br>"); error++;
+    }
+    if(checkValidDay(myForm.birthmonth.value,myForm.birthday.value)) { $("#message").append("Please enter a valid day.<br>"); error++; }
+    
+    // phone
+    if(myForm.phone.value == "") { $("#message").append("Please enter your phone.<br>"); error++; }
+    if(/^\(\d{3}\)\s\d{3}-\d{4}$/.test(myForm.phone.value) == false) { $("#message").append("Please enter a phone number with the proper format: (###) ###-####<br>"); error++; }
+    
+    // zip
+    if(myForm.zip.value == "") { $("#message").append("Please enter your ZIP code.<br>"); error++; }
+    if(/^\d{5}$/.test(myForm.zip.value) == false && /^\d{5}-\d{4}$/.test(myForm.zip.value) == false) { $("#message").append("Please enter a ZIP code with the proper format: ##### or #####-####<br>"); error++; }
+    
+    // profile
+    if(myForm.profile.value == "") { $("#message").append("Please enter a profile.<br>"); error++; }
+    
+    // Now that the forms have been validated, do the fancier stuff.
+    
+    if (error == 0) {
+        
+        // Get the difference between the years.
+        var currentDate = new Date();        
+        var currentYear = currentDate.getFullYear();
+        var currentMonth = currentDate.getMonth()+1;
+        var currentDay = currentDate.getDate();
+        var yearDiff = currentYear-myForm.birthyear.value;
+        
+        // Then subtract by 1 if the birthday hasn't happened yet.
+        if(currentMonth <= Number(myForm.birthmonth.value) && currentDay <= Number(myForm.birthday.value)) { yearDiff-- };
+    
+        if(yearDiff < 18) { $("#message").append("You must be 18 or older.</br>"); error++;}
+        
+        var javascriptCount = 0;
+        var jqueryCount = 0;
+        var jsCount = 0;
+        
+        //Check to make sure the regex returns an array.
+        if (myForm.profile.value.match(/javascript/igm) instanceof Array) { javascriptCount = (myForm.profile.value.match(/javascript/igm)).length;
+        }
+        if (myForm.profile.value.match(/jquery/igm) instanceof Array) { jqueryCount = (myForm.profile.value.match(/jquery/igm)).length;
+        }
+        if (myForm.profile.value.match(/js/igm) instanceof Array) { jsCount = (myForm.profile.value.match(/js/igm)).length;
+        }
+        
+    }
+    
+    if(error > 0) { $("#message").append("NOT VALID<br>"); $("#message").addClass("badresult"); }
+    else {
+        $("#message").append("VALID!<br>");
+        $("#message").append("Instances of Javascript: "+javascriptCount+"<br>Instances of jQuery: "+jqueryCount+"<br>Instances of js: "+jsCount+"<br>");
+        $("#message").addClass("goodresult");
+    }
+    
+    // Check for javascript, jquery, js, various cases and multi lines.
+
+    
+
+    
+    // cancel the normal form submission behavior
+    return false;
+    
+}
+    
+</script>
+
+</body>
+</html>
