@@ -5,12 +5,17 @@
     <title>WEB150 Final Presentation noUISlider</title>
     <link href="nouislider.css" rel="stylesheet">
     <link href="finalexample.css" rel="stylesheet">
+    
 </head>
 
 <body>
 
 <!-- THE SLIDERS -->
     
+<h1>noUiSlider Demos</h1>    
+
+<h2>Color Picker</h2>    
+
 <div id="colorpicker">
 	<div class="sliders" id="red"></div>
 	<div class="sliders" id="green"></div>
@@ -19,11 +24,18 @@
 	<div id="result"></div>
 </div>
 
+<h2>Orbit Slider</h2>
+    
+    <div class="solarcontainer"><canvas id="canvas" width="300" height="300"></canvas></div>
+
+<div id="solarslider"></div>
+
     
 <!-- THE NOUISILDER CODE -->
     
 <script src="nouislider.js"></script>
 <script src="wNumb.js"></script>
+<script src="solar.js"></script>
 
 <script>
 
@@ -72,5 +84,19 @@ for ( var i = 0; i < sliders.length; i++ ) {
 }
 </script>
 
+<script>
+    
+var solarslider = document.getElementById('solarslider');
+
+noUiSlider.create(solarslider, {
+	start: [ 105 ],
+	range: {
+		'min': [  50 ],
+		'max': [ 150 ]
+	}
+});
+
+</script>
+    
 </body>
 </html>
